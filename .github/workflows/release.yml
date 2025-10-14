@@ -3,7 +3,7 @@ name: Release Tauri App
 on:
   push:
     tags:
-      - "v*.*.*" # 当你打 tag 时触发
+      - "v*.*.*"
 
 jobs:
   release:
@@ -18,7 +18,7 @@ jobs:
           node-version: 20
 
       - name: Setup Rust
-        uses: actions/setup-rust@v1
+        uses: actions-rs/setup-rust@v1
         with:
           rust-version: stable
 
@@ -37,8 +37,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate latest.json for auto-updater
-        uses: tauri-apps/tauri-action@v2
+      - name: Generate latest.json
+        uses: tauri-apps/tauri-action@v1
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           release: ${{ github.ref_name }}
