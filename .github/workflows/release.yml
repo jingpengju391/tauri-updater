@@ -1,0 +1,45 @@
+name: Release Tauri App
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # 当你打 tag 时触发
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: stable
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Tauri app
+        run: |
+          npm run build
+          npx tauri build
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: src-tauri/target/release/bundle/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate latest.json for auto-updater
+        uses: tauri-apps/tauri-action@v2
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          release: ${{ github.ref_name }}
+          assets: src-tauri/target/release/bundle/**/*
