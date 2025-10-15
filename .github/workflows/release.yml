@@ -36,6 +36,10 @@ jobs:
         with:
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
           releaseName: "App v__VERSION__"
-          releaseBody: "See the assets to download this version and install."
+          releaseBody: |
+            🎉 版本更新说明：
+            - 修复了自动更新失败的 bug
+            - 优化了启动速度
+            - 新增日志查看功能
           releaseDraft: true
           prerelease: false
